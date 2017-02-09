@@ -10,7 +10,7 @@ if [ -f protected ]; then
    exit 0 
 fi
 
-vm="node$(cat index)"
+vm="node$(cat boxindex)"
 
 uuid=$(vboxmanage showvminfo $vm | grep vmdk | awk '{print $NF}' | cut -d')' -f1)
 
