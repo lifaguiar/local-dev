@@ -1,6 +1,6 @@
 #!/bin/bash
 yum update -y
-yum install -y unzip zip
+yum install -y unzip zip git
 curl -sSL https://get.docker.com/ | sh
 mkdir -p /data
 
@@ -9,16 +9,10 @@ for net in $(ip addr | egrep -v '(lo|docker0)' | grep DOWN | cut -d ':' -f2); do
    ifup $net
 done
 
-# We have other disk, use it for Docker instaltion 
-if [ "$(parted -lm | grep '/dev/xdb')" != "" ]; then
-   if [ "$(/sbin/parted -lm | grep -a1 /dev/sdb | grep xfs)" == "" ]; then 
-      mkfs.xfs /dev/sdb
-      printf "/dev/sdb\t/data\txfs\tdefaults 0 0">>/etc/fstab
-      mount /dev/sdb /data   
-   fi
-fi
-
 mkdir /data/docker
+
+systemctl start docker
+systemctl stop docker
 
 # Not use /var/lib for Docker instalations
 printf '{\n\t"graph":"/data/docker"\n}' >/etc/docker/daemon.json
@@ -32,3 +26,5 @@ systemctl start docker
 
 # We want daemon start automatically when machine is up
 systemctl enable docker
+
+git config http.sslVerify "false"
