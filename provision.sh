@@ -27,4 +27,6 @@ systemctl start docker
 # We want daemon start automatically when machine is up
 systemctl enable docker
 
-git config http.sslVerify "false"
+git config --global http.sslVerify "false"
+git config --global credential.helper "cache --timeout=86400"
+sysctl -w net.ipv4.ip_forward=1
