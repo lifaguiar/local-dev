@@ -20,6 +20,7 @@ $vm_memory = 2048
 $vm_cpus = 2
 $vm_net = "19.8.206"
 $vm_domain = "api.lincolmlabs"
+$vm_docker_registry = "registry.lincolmlabs"
 $vb_cpuexecutioncap = 75
 $shared_folders = {}
 $forwarded_ports = {}
@@ -93,7 +94,7 @@ Vagrant.configure("2") do |config|
       config.vm.hostname = vm_name
 	  config.hostsupdater.aliases = [
 		vm_name + "." + $vm_domain,
-		"registry.appustechnology"
+		$vm_docker_registry
       ]
 
       if $enable_serial_logging
