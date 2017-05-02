@@ -1,0 +1,4 @@
+{
+   "labels": [ "appus-class=api" ],
+   "insecure-registries": [ "registry.appustechnology:5000" ]
+}
