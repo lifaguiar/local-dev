@@ -1,4 +1,4 @@
 {
-   "labels": [ "appus-class=api" ],
-   "insecure-registries": [ "registry.appustechnology:5000" ]
+   "labels": [ "server-class=cache" ],
+   "insecure-registries": [ "registry.lincolmlabs:5000" ]
 }
