@@ -20,7 +20,7 @@ $vm_memory = 2048
 $vm_cpus = 2
 $vm_net = "19.8.206"
 $vm_domain = "api.lincolmlabs"
-$vm_docker_registry = "registry.lincolmlabs"
+$vm_docker_registry = "swarm-master.lincolmlabs.cloud"
 $vb_cpuexecutioncap = 75
 $shared_folders = {}
 $forwarded_ports = {}
@@ -159,13 +159,13 @@ Vagrant.configure("2") do |config|
         config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
 
-        config.vm.provision :file, :source => "daemon.json", :destination => "/tmp/daemon.json"
-        config.vm.provision :shell, :inline => "mkdir -p /etc/docker && mv /tmp/daemon.json /etc/docker/", :privileged => true
+		config.vm.provision :shell, :inline => "mkdir -p /etc/docker && echo -e {\n\t\"graph\": \"overlay\",\n\t\"insecure-registries\": [ \"#{$vm_docker_registry}:5000\" ]} >/etc/docker/daemon.json", :privileged => true
         config.vm.provision :shell, :inline => "systemctl restart docker", :privileged => true
         config.vm.provision :shell, :inline => "docker swarm init --advertise-addr=#{ip}"
         config.vm.provision :shell, :inline => "docker run -d --name registry -p 5000:5000 --restart=always registry:2.1"
+        config.vm.provision :shell, :inline => "bash -c \"echo '127.0.0.1 #{$vm_docker_registry}' >>/etc/hosts\""
       end
-
+	  config.vm.provision :shell, run: 'always', :inline => "git config --global credential.helper 'cache --timeout=86400'"
     end
   end
 end
