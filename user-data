@@ -1,13 +1,23 @@
 #cloud-config
+
 users:
   - name: vagrant
     passwd: "$6$GTAC$eeiz0vjIALULzoAjzHwDC8Tm2jUbnCbWUivhzTste4FTDQrgkXDNYxy/MKtiLv5aQMQw91VRLI/uFSieBem/S/"
     groups:
-      - sudo
-      - docker
-
-coreos:
+       - sudo
+       - docker
+coreos:		
   units:
+    - name: settimezone.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set the time zone
+
+        [Service]
+        ExecStart=/usr/bin/timedatectl set-timezone America/Sao_Paulo
+        RemainAfterExit=yes
+        Type=oneshot		
     - name: docker-tcp.socket
       command: start
       enable: true
@@ -21,4 +31,4 @@ coreos:
         BindIPv6Only=both
 
         [Install]
-         WantedBy=sockets.target
+        WantedBy=sockets.target
