@@ -16,7 +16,7 @@ $image_version = "current"
 $enable_serial_logging = false
 $share_home = false
 $vm_gui = false
-$vm_memory = 2048
+$vm_memory = 4096
 $vm_cpus = 2
 $vm_net = "19.8.206"
 $vm_domain = "api.lincolmlabs"
@@ -24,6 +24,7 @@ $vm_docker_registry = "swarm-master.app.cloud:5000"
 $vb_cpuexecutioncap = 75
 $shared_folders = {}
 $forwarded_ports = {}
+$forwarded_ports = { 80=>80 }
 
 # Attempt to apply the deprecated environment variable NUM_INSTANCES to
 # $num_instances while allowing config.rb to override it
