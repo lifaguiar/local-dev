@@ -158,6 +158,7 @@ Vagrant.configure("2") do |config|
         config.vm.provision :shell, :inline => "docker swarm init --advertise-addr=#{ip} && docker run -d --name registry -p 5000:5000 --restart=always registry:2.1"
       end
       config.vm.provision :shell, run: 'always', :inline => "git config --global credential.helper 'cache --timeout=86400'"
+      config.vm.provision :shell, run: 'always', :inline => "git config http.sslVerify false"
     end
   end
 end
