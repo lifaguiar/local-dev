@@ -19,12 +19,11 @@ $vm_gui = false
 $vm_memory = 4096
 $vm_cpus = 2
 $vm_net = "19.8.206"
-$vm_domain = "api.lincolmlabs"
+$vm_domain = "lincolmlabs.dev"
 $vm_docker_registry = "swarm-master.app.cloud:5000"
 $vb_cpuexecutioncap = 75
 $shared_folders = {}
-$forwarded_ports = {}
-$forwarded_ports = { 80=>80 }
+$forwarded_ports = { 80=>80, 443=>443 }
 
 # Attempt to apply the deprecated environment variable NUM_INSTANCES to
 # $num_instances while allowing config.rb to override it
@@ -92,7 +91,7 @@ Vagrant.configure("2") do |config|
 
   (1..$num_instances).each do |i|
     config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |config|
-      config.vm.hostname = "swarm-master.app.cloud"
+      config.vm.hostname = "#{$vm_domain}"
 
       if $enable_serial_logging
         logdir = File.join(File.dirname(__FILE__), "log")
@@ -155,7 +154,7 @@ Vagrant.configure("2") do |config|
       if File.exist?(CLOUD_CONFIG_PATH)
         config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
-        config.vm.provision :shell, :inline => "docker swarm init --advertise-addr=#{ip} && docker run -d --name registry -p 5000:5000 --restart=always registry:2.1"
+        config.vm.provision :shell, :inline => "docker swarm init --advertise-addr eth0 && docker run -d --name registry -p 5000:5000 --restart=always registry:2.1"
       end
       config.vm.provision :shell, run: 'always', :inline => "git config --global credential.helper 'cache --timeout=86400'"
       config.vm.provision :shell, run: 'always', :inline => "git config --global http.sslVerify false"
