@@ -153,7 +153,8 @@ Vagrant.configure("2") do |config|
       if File.exist?(CLOUD_CONFIG_PATH)
         config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
-        config.vm.provision :shell, :inline => "docker swarm init --advertise-addr eth0 && docker run -d --name registry -p 5000:5000 --restart=always registry:2.1"
+        config.vm.provision :shell, :inline => "docker swarm init --advertise-addr eth1"
+		config.vm.provision :shell, :inline => "docker run -d --name registry -p 5000:5000 --restart=always registry"
 		config.vm.provision :shell, :inline => "git config --global credential.helper 'cache --timeout=86400'"
         config.vm.provision :shell, :inline => "git config --global http.sslVerify false"
       end      

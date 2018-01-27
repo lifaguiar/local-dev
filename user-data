@@ -17,7 +17,9 @@ coreos:
         [Service]
         ExecStart=/usr/bin/timedatectl set-timezone America/Sao_Paulo
         RemainAfterExit=yes
-        Type=oneshot		
+        Type=oneshot
+    - name: "etcd2.service"
+      command: "start"
     - name: docker-tcp.socket
       command: start
       enable: true
