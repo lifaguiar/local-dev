@@ -16,11 +16,11 @@ $image_version = "current"
 $enable_serial_logging = false
 $share_home = false
 $vm_gui = false
-$vm_memory = 4096
+$vm_memory = 2048
 $vm_cpus = 2
 $vm_net = "19.8.206"
 $vm_domain = "lincolmlabs.dev"
-$vm_docker_registry = "swarm-master.app.cloud:5000"
+$vm_docker_registry = "swarm-master.lincolmlabs.cloud:5000"
 $vb_cpuexecutioncap = 75
 $shared_folders = {}
 $forwarded_ports = { 80=>80, 443=>443 }
@@ -138,8 +138,7 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--cpuexecutioncap", "#{$vb_cpuexecutioncap}"]
       end
 
-      ip = "#{$vm_net}.#{box_index(i)}"
-      config.vm.network :private_network, ip: ip
+      config.vm.network :private_network, ip: "#{$vm_net}.#{box_index(i)}"
 	  
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
       #config.vm.synced_folder ".", "/home/core/share", id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
@@ -155,9 +154,9 @@ Vagrant.configure("2") do |config|
         config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
         config.vm.provision :shell, :inline => "docker swarm init --advertise-addr eth0 && docker run -d --name registry -p 5000:5000 --restart=always registry:2.1"
-      end
-      config.vm.provision :shell, run: 'always', :inline => "git config --global credential.helper 'cache --timeout=86400'"
-      config.vm.provision :shell, run: 'always', :inline => "git config --global http.sslVerify false"
+		config.vm.provision :shell, :inline => "git config --global credential.helper 'cache --timeout=86400'"
+        config.vm.provision :shell, :inline => "git config --global http.sslVerify false"
+      end      
     end
   end
 end
