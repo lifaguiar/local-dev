@@ -23,7 +23,7 @@ $vm_domain = "lincolmlabs.dev"
 $vm_docker_registry = "swarm-master.lincolmlabs.cloud:5000"
 $vb_cpuexecutioncap = 75
 $shared_folders = {}
-$forwarded_ports = { 80=>80, 443=>443 }
+$forwarded_ports = {} # { 80=>80, 443=>443 } # guest=>host
 
 # Attempt to apply the deprecated environment variable NUM_INSTANCES to
 # $num_instances while allowing config.rb to override it
